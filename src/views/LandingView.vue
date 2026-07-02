@@ -162,11 +162,16 @@
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div v-for="b in barbers" :key="b.id" class="card-dark p-8 text-center group hover:border-gold-700 transition-all duration-300">
-            <div class="w-24 h-24 rounded-full mx-auto flex items-center justify-center font-display text-3xl text-gold-400 mb-5 group-hover:animate-glow-gold transition-all"
-              style="background:linear-gradient(135deg,#1A1A1A,#2C2C2C);border:1px solid #3A3A3A">
-              {{ b.avatar_initial }}
-            </div>
-            <div class="text-3xl mb-3">{{ b.emoji }}</div>
+         <div
+  class="w-28 h-28 rounded-full mx-auto overflow-hidden mb-6 border-2 border-gold-500 shadow-lg"
+>
+  <img
+    :src="b.image"
+    :alt="b.name"
+    class="w-full h-full object-cover"
+  >
+</div>
+
             <h3 class="font-display text-xl text-chalk tracking-wide mb-1">{{ b.name }}</h3>
             <div class="section-tag text-xs mb-3">{{ b.specialty }}</div>
             <div class="text-silver text-sm font-body mb-4">{{ b.exp }} de experiencia</div>

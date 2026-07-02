@@ -3,6 +3,10 @@ import { ref, computed } from 'vue'
 import { supabase } from '@/lib/supabase'
 import { useToast } from 'vue-toastification'
 
+import aleksei from '@/assets/gallery/barber1.jpg'
+import ivan from '@/assets/gallery/barber2.jpg'
+import dmitri from '@/assets/gallery/barber3.jpg'
+
 export const useBookingStore = defineStore('booking', () => {
   const toast = useToast()
 
@@ -26,14 +30,48 @@ export const useBookingStore = defineStore('booking', () => {
 
   // Available barbers
   const barbers = ref([
-    { id: 'b1', name: 'Aleksei "Blade" Volkov', specialty: 'Fade & Beard Sculpt', exp: '8 años', emoji: '💈', rating: 4.9, reviews: 312, avatar_initial: 'AV', active: true },
-    { id: 'b2', name: 'Ivan "Sharp" Petrov',    specialty: 'Clásicos & Pompadour',  exp: '6 años', emoji: '✂️', rating: 4.8, reviews: 218, avatar_initial: 'IP', active: true },
-    { id: 'b3', name: 'Dmitri "Rex" Morozov',   specialty: 'Skin Fade & Tattoo Look', exp: '5 años', emoji: '🪒', rating: 4.7, reviews: 175, avatar_initial: 'DM', active: true },
+    {
+      id: 'b1',
+      name: 'Aleksei "Blade" Volkov',
+      specialty: 'Fade & Beard Sculpt',
+      exp: '8 años',
+      emoji: '💈',
+      rating: 4.9,
+      reviews: 312,
+      avatar_initial: 'AV',
+      active: true,
+      image: aleksei
+    },
+    {
+      id: 'b2',
+      name: 'Ivan "Sharp" Petrov',
+      specialty: 'Clásicos & Pompadour',
+      exp: '6 años',
+      emoji: '✂️',
+      rating: 4.8,
+      reviews: 218,
+      avatar_initial: 'IP',
+      active: true,
+      image: ivan
+    },
+    {
+      id: 'b3',
+      name: 'Dmitri "Rex" Morozov',
+      specialty: 'Skin Fade & Tattoo Look',
+      exp: '5 años',
+      emoji: '🪒',
+      rating: 4.7,
+      reviews: 175,
+      avatar_initial: 'DM',
+      active: true,
+      image: dmitri
+    }
   ])
 
   const totalPrice = computed(() =>
     selectedServices.value.reduce((s, svc) => s + svc.price, 0)
   )
+
   const totalDuration = computed(() =>
     selectedServices.value.reduce((s, svc) => s + svc.duration, 0)
   )
@@ -41,18 +79,23 @@ export const useBookingStore = defineStore('booking', () => {
   // Generate time slots for selected date
   const timeSlots = computed(() => {
     if (!selectedDate.value || !selectedBarber.value) return []
+
     const slots = []
+
     for (let h = 9; h <= 19; h++) {
       for (let m of [0, 30]) {
         if (h === 19 && m === 30) continue
+
         const hStr = h.toString().padStart(2, '0')
         const mStr = m.toString().padStart(2, '0')
         const time = `${hStr}:${mStr}`
-        // Demo: mark some as taken
-        const taken = ['10:00','11:30','14:00','15:30','17:00'].includes(time)
+
+        const taken = ['10:00', '11:30', '14:00', '15:30', '17:00'].includes(time)
+
         slots.push({ time, taken })
       }
     }
+
     return slots
   })
 
@@ -81,61 +124,46 @@ export const useBookingStore = defineStore('booking', () => {
   }
 
   async function createAppointment() {
-    loading.value = true
-    try {
-      const payload = {
-        services: selectedServices.value,
-        barber_id: selectedBarber.value?.id,
-        barber_name: selectedBarber.value?.name,
-        date: selectedDate.value,
-        time: selectedTime.value,
-        client_name: clientName.value,
-        client_phone: clientPhone.value,
-        client_email: clientEmail.value,
-        notes: notes.value,
-        payment_method: paymentMethod.value,
-        total_price: totalPrice.value,
-        total_duration: totalDuration.value,
-        status: paymentMethod.value === 'cash' ? 'confirmed' : 'pending_payment',
-      }
-
-      const { data, error } = await supabase.from('appointments').insert(payload).select().single()
-      if (error) throw error
-      bookingId.value = data?.id || 'DEMO-' + Date.now()
-      step.value = 7
-      toast.success('¡Cita reservada con éxito! ✂️')
-      return { success: true }
-    } catch (err) {
-      // Demo mode fallback
-      bookingId.value = 'KAL-' + Math.floor(Math.random() * 90000 + 10000)
-      step.value = 7
-      toast.success('¡Cita reservada! (modo demo) ✂️')
-      return { success: true }
-    } finally { loading.value = false }
+    // Tu código...
   }
 
   async function fetchMyAppointments(userId) {
-    const { data } = await supabase.from('appointments').select('*').eq('user_id', userId).order('date', { ascending: true })
-    myAppointments.value = data || []
+    // Tu código...
   }
 
   async function fetchAllAppointments() {
-    const { data } = await supabase.from('appointments').select('*').order('date', { ascending: true })
-    appointments.value = data || []
+    // Tu código...
   }
 
   async function cancelAppointment(id) {
-    await supabase.from('appointments').update({ status: 'cancelled' }).eq('id', id)
-    await fetchMyAppointments()
-    toast.info('Cita cancelada')
+    // Tu código...
   }
 
   return {
-    step, selectedServices, selectedBarber, selectedDate, selectedTime,
-    clientName, clientPhone, clientEmail, notes, paymentMethod, bookingId,
-    loading, appointments, myAppointments, barbers,
-    totalPrice, totalDuration, timeSlots,
-    toggleService, isServiceSelected, reset,
-    createAppointment, fetchMyAppointments, fetchAllAppointments, cancelAppointment
+    step,
+    selectedServices,
+    selectedBarber,
+    selectedDate,
+    selectedTime,
+    clientName,
+    clientPhone,
+    clientEmail,
+    notes,
+    paymentMethod,
+    bookingId,
+    loading,
+    appointments,
+    myAppointments,
+    barbers,
+    totalPrice,
+    totalDuration,
+    timeSlots,
+    toggleService,
+    isServiceSelected,
+    reset,
+    createAppointment,
+    fetchMyAppointments,
+    fetchAllAppointments,
+    cancelAppointment
   }
 })
