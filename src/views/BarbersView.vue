@@ -8,12 +8,22 @@
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div v-for="b in barbers" :key="b.id" class="card-dark p-8 text-center group hover:border-gold-700 transition-all duration-300">
-          <div class="w-28 h-28 rounded-full mx-auto flex items-center justify-center font-display text-4xl text-gold-400 mb-6 group-hover:animate-glow-gold transition-all"
-            style="background:linear-gradient(135deg,#1A1A1A,#2C2C2C);border:1px solid #3A3A3A">
-            {{ b.avatar_initial }}
-          </div>
-          <div class="text-4xl mb-3">{{ b.emoji }}</div>
+<div
+  v-for="b in barbers"
+  :key="b.id"
+  class="card-dark p-8 text-center group hover:border-gold-700 transition-all duration-500 hover:-translate-y-2"
+>  
+          <div class="relative mb-6">
+ <img
+  :src="b.image"
+  :alt="b.name"
+  class="w-full h-72 object-cover mb-6"
+/>
+
+  <div
+    class="absolute inset-0 rounded-full border border-gold-400 animate-pulse opacity-30"
+  ></div>
+</div>
           <h3 class="font-display text-2xl text-chalk tracking-wide mb-1">{{ b.name }}</h3>
           <div class="section-tag text-xs mb-4">{{ b.specialty }}</div>
 
@@ -49,13 +59,27 @@
 import { useBookingStore } from '@/stores/booking'
 const booking = useBookingStore()
 
+
+
+import aleksei from '@/assets/gallery/barber1.jpg'
+import ivan from '@/assets/gallery/barber2.jpg'
+import dmitri from '@/assets/gallery/barber3.jpg'
+
 const barbers = booking.barbers.map(b => ({
   ...b,
+
+  image: {
+    b1: aleksei,
+    b2: ivan,
+    b3: dmitri
+  }[b.id],
+
   bio: {
     b1: 'Especialista en fades de alta precisión y esculpido de barba. Formado en Madrid, trae técnica europea con sensibilidad mexicana.',
     b2: 'Maestro de los cortes clásicos y peinados con volumen. Su pompadour es legendario en la colonia.',
     b3: 'El más joven del equipo pero con un ojo artístico excepcional. Especialista en diseños y skin fades extremos.',
   }[b.id],
+
   tags: {
     b1: ['Fade Expert','Beard Sculpt','Navaja'],
     b2: ['Clásicos','Pompadour','Tijera'],

@@ -56,7 +56,15 @@
 
             <!-- Center card -->
             <div class="relative z-10 card-gold-border p-10 text-center w-72">
-              <div class="text-8xl mb-5 animate-float">✂️</div>
+<div class="relative">
+  <img
+    src="@/assets/gallery/main.jpg"
+    class="w-[420px] h-[520px] object-cover rounded-lg"
+  >
+
+  <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+</div>
+
               <div class="font-display tracking-[0.2em] text-3xl text-gold-400 mb-1">KALASHNIKOV</div>
               <div class="text-[10px] tracking-[0.5em] text-silver uppercase mb-6">Barber Shop</div>
               <div class="gold-line-full mb-6"></div>
@@ -188,15 +196,33 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
           <div v-for="g in galleryPreview" :key="g.id"
-            :class="['overflow-hidden cursor-pointer group relative', g.tall ? 'row-span-2' : '']"
+             class="overflow-hidden cursor-pointer group relative rounded-lg"
             style="min-height:180px">
-            <div class="w-full h-full flex items-center justify-center text-5xl md:text-7xl transition-transform duration-500 group-hover:scale-110 relative"
-              :style="`background:${g.bg};min-height:${g.tall?'380px':'180px'}`">
-              {{ g.emoji }}
-              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-                <span class="text-white text-sm font-display tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">{{ g.style }}</span>
-              </div>
-            </div>
+           <div
+  class="relative overflow-hidden"
+  :style="`min-height:${g.tall ? '380px' : '180px'}`"
+>
+  <img
+    :src="g.image"
+    :alt="g.style"
+  class="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+      :style="`min-height:${g.tall ? '380px' : '180px'}`"
+  />
+
+  <div
+    class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
+  ></div>
+
+  <div
+    class="absolute inset-0 flex items-end justify-start p-4"
+  >
+    <span
+      class="text-white font-display tracking-widest opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+    >
+      {{ g.style }}
+    </span>
+  </div>
+</div>
           </div>
         </div>
       </div>
@@ -247,6 +273,32 @@
 <script setup>
 import { useBookingStore } from '@/stores/booking'
 import { useServicesStore } from '@/stores/services'
+import skinfade from '@/assets/gallery/skinfade.jpg'
+import altofade from '@/assets/gallery/altofade.jpg'
+import fadeuve from '@/assets/gallery/fadeuve.jpg'
+
+
+
+import clasico from '@/assets/gallery/clasico.jpg'
+import clasicodos from '@/assets/gallery/clasicodos.jpg'
+import clasicotres from '@/assets/gallery/clasicotres.jpg'
+
+
+
+import barba from '@/assets/gallery/barba.jpg'
+import barbados from '@/assets/gallery/barbados.jpg'
+import barbatres from '@/assets/gallery/barbatres.jpg'
+
+
+
+import diseño from '@/assets/gallery/diseño.jpg'
+
+
+
+import transformacion1 from '@/assets/gallery/fadeba.jpg'
+import transformacion2 from '@/assets/gallery/clean.jpeg'
+import transformacion3 from '@/assets/gallery/longclean.png'
+
 
 const booking = useBookingStore()
 const servicesStore = useServicesStore()
@@ -277,16 +329,52 @@ const bookingSteps = [
 ]
 
 const galleryPreview = [
-  { id:1, emoji:'💈', style:'Skin Fade', bg:'linear-gradient(135deg,#1A1A1A,#2C2C2C)', tall:true },
-  { id:2, emoji:'✂️', style:'Clásico',  bg:'linear-gradient(135deg,#111,#222)', tall:false },
-  { id:3, emoji:'🪒', style:'Barba',    bg:'linear-gradient(135deg,#1A1209,#2C1E0A)', tall:false },
-  { id:4, emoji:'🎨', style:'Design',   bg:'linear-gradient(135deg,#0A0A1A,#111122)', tall:false },
-  { id:5, emoji:'🧔', style:'Beard Art',bg:'linear-gradient(135deg,#111,#1A1A1A)', tall:false },
-  { id:6, emoji:'👑', style:'VIP',      bg:'linear-gradient(135deg,#1A1500,#2C2200)', tall:true },
-  { id:7, emoji:'⚡', style:'Platinum', bg:'linear-gradient(135deg,#0A0A0A,#1A1A1A)', tall:false },
-  { id:8, emoji:'🔥', style:'Trending', bg:'linear-gradient(135deg,#1A0A0A,#2C0A0A)', tall:false },
+  {
+    id: 1,
+    image: skinfade,
+    style: 'Skin Fade Perfecto'
+  },
+  {
+    id: 2,
+    image: altofade,
+    style: 'High Fade'
+  },
+  {
+    id: 3,
+    image: fadeuve,
+    style: 'Fade en V'
+  },
+  {
+    id: 4,
+    image: clasico,
+    style: 'Corte Clásico Ejecutivo'
+  },
+  {
+    id: 5,
+    image: clasicodos,
+    style: 'Business Cut'
+  },
+  {
+    id: 6,
+    image: clasicotres,
+    style: 'Clásico Juvenil'
+  },
+  {
+    id: 7,
+    image: barba,
+    style: 'Beard Sculpt'
+  },
+  {
+    id: 8,
+    image: barbados,
+    style: 'Italian Beard'
+  },
+  {
+    id: 9,
+    image: barbatres,
+    style: 'Long Beard'
+  }
 ]
-
 const reviews = [
   { name:'Carlos M.', initial:'C', barbero:'Cliente de Aleksei', text:'Llevo 3 años viniendo y nunca me decepciona. El mejor fade de la ciudad, sin discusión. El ambiente es increíble y la atención es de primera.' },
   { name:'Rodrigo F.', initial:'R', barbero:'Cliente de Ivan', text:'Vine buscando un pompadour clásico y salí con el corte de mi vida. La atención al detalle de Ivan es impresionante. Ya tengo mi cita para el próximo mes.' },

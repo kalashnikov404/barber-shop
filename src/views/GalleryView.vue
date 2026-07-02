@@ -18,10 +18,18 @@
       <!-- Masonry-ish grid -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-16">
         <div v-for="g in filtered" :key="g.id" class="overflow-hidden cursor-pointer group relative" :style="`min-height:${g.tall?'380px':'180px'}`" @click="selected=g">
-          <div class="w-full h-full flex items-center justify-center text-5xl md:text-7xl transition-transform duration-500 group-hover:scale-110"
-            :style="`background:${g.bg};min-height:${g.tall?'380px':'180px'}`">
-            {{ g.emoji }}
-          </div>
+        
+        <div class="relative w-full h-full overflow-hidden"
+  :style="`min-height:${g.tall?'380px':'180px'}`">
+
+  <img
+    :src="g.image"
+    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+  />
+
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+</div>
+
           <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex flex-col items-center justify-center gap-1">
             <span class="text-white text-sm font-display tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">{{ g.style }}</span>
             <span class="text-gold-400 text-xs font-body opacity-0 group-hover:opacity-100 transition-opacity">por {{ g.barber }}</span>
@@ -36,17 +44,24 @@
           <h2 class="font-display text-4xl text-chalk">ANTES <span class="text-silver">/</span> <span class="text-gold-gradient">DESPUÉS</span></h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div v-for="t in transformations" :key="t.id" class="card-dark overflow-hidden">
-            <div class="grid grid-cols-2">
-              <div class="h-40 flex items-center justify-center text-4xl relative" style="background:#1A1A1A">
-                {{ t.before }}
-                <span class="absolute bottom-2 left-2 text-[9px] text-silver tracking-widest uppercase">Antes</span>
-              </div>
-              <div class="h-40 flex items-center justify-center text-4xl relative" style="background:linear-gradient(135deg,#1A1500,#2C2200)">
-                {{ t.after }}
-                <span class="absolute bottom-2 left-2 text-[9px] text-gold-400 tracking-widest uppercase">Después</span>
-              </div>
-            </div>
+          <div v-for="t in transformations"
+  :key="t.id"
+  class="card-dark overflow-hidden group transition-all duration-500 hover:-translate-y-2">
+<div class="h-64 overflow-hidden relative">
+ <img
+  :src="t.image"
+  :alt="t.style"
+  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+/>
+
+  <div class="absolute top-3 left-3 bg-black/70 px-2 py-1 rounded text-[10px] tracking-widest text-silver uppercase">
+    Antes
+  </div>
+
+  <div class="absolute top-3 right-3 bg-gold-500 px-2 py-1 rounded text-[10px] tracking-widest text-ink uppercase">
+    Después
+  </div>
+</div>
             <div class="p-4">
               <div class="font-display text-chalk text-sm">{{ t.style }}</div>
               <div class="text-silver text-xs font-body">por {{ t.barber }}</div>
@@ -60,7 +75,15 @@
     <teleport to="body">
       <div v-if="selected" class="fixed inset-0 z-50 flex items-center justify-center px-4 modal-backdrop" @click.self="selected=null">
         <div class="card-gold-border p-2 max-w-lg w-full">
-          <div class="h-72 flex items-center justify-center text-9xl" :style="`background:${selected.bg}`">{{ selected.emoji }}</div>
+         
+         
+<div class="h-96 w-full overflow-hidden">
+  <img
+    :src="selected.image"
+    class="w-full h-full object-cover"
+  />
+</div>
+
           <div class="p-5 flex items-center justify-between">
             <div>
               <div class="font-display text-chalk text-lg">{{ selected.style }}</div>
@@ -76,31 +99,165 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import skinfade from '@/assets/gallery/skinfade.jpg'
+import altofade from '@/assets/gallery/altofade.jpg'
+import fadeuve from '@/assets/gallery/fadeuve.jpg'
+
+
+
+import clasico from '@/assets/gallery/clasico.jpg'
+import clasicodos from '@/assets/gallery/clasicodos.jpg'
+import clasicotres from '@/assets/gallery/clasicotres.jpg'
+
+
+
+import barba from '@/assets/gallery/barba.jpg'
+import barbados from '@/assets/gallery/barbados.jpg'
+import barbatres from '@/assets/gallery/barbatres.jpg'
+
+
+
+import diseño from '@/assets/gallery/diseño.jpg'
+
+
+
+import transformacion1 from '@/assets/gallery/fadeba.jpg'
+import transformacion2 from '@/assets/gallery/clean.jpeg'
+import transformacion3 from '@/assets/gallery/longclean.png'
+
+
 
 const cats = ['Fade','Clásico','Barba','Color','Diseño']
+
 const active = ref('all')
 
 const gallery = [
-  { id:1,  cat:'Fade',    emoji:'💈', style:'Skin Fade Perfecto', barber:'Aleksei', bg:'linear-gradient(135deg,#1A1A1A,#2C2C2C)', tall:true },
-  { id:2,  cat:'Clásico', emoji:'✂️', style:'Corte Clásico',       barber:'Ivan',    bg:'linear-gradient(135deg,#111,#222)', tall:false },
-  { id:3,  cat:'Barba',   emoji:'🪒', style:'Beard Sculpt',        barber:'Aleksei', bg:'linear-gradient(135deg,#1A1209,#2C1E0A)', tall:false },
-  { id:4,  cat:'Diseño',  emoji:'🎨', style:'Diseño Geométrico',   barber:'Dmitri',  bg:'linear-gradient(135deg,#0A0A1A,#111122)', tall:false },
-  { id:5,  cat:'Barba',   emoji:'🧔', style:'Full Beard Art',      barber:'Aleksei', bg:'linear-gradient(135deg,#111,#1A1A1A)', tall:false },
-  { id:6,  cat:'Clásico', emoji:'👑', style:'Pompadour VIP',       barber:'Ivan',    bg:'linear-gradient(135deg,#1A1500,#2C2200)', tall:true },
-  { id:7,  cat:'Color',   emoji:'⚡', style:'Platinum Blonde',     barber:'Dmitri',  bg:'linear-gradient(135deg,#0A0A0A,#1A1A1A)', tall:false },
-  { id:8,  cat:'Fade',    emoji:'🔥', style:'High Fade Trending',  barber:'Dmitri',  bg:'linear-gradient(135deg,#1A0A0A,#2C0A0A)', tall:false },
-  { id:9,  cat:'Fade',    emoji:'💈', style:'Low Fade Clean',      barber:'Ivan',    bg:'linear-gradient(135deg,#151515,#252525)', tall:false },
-  { id:10, cat:'Diseño',  emoji:'⚔️', style:'Tattoo Line Art',     barber:'Dmitri',  bg:'linear-gradient(135deg,#0A0A1A,#1A1A2A)', tall:false },
-  { id:11, cat:'Color',   emoji:'🥈', style:'Gris Plata',          barber:'Aleksei', bg:'linear-gradient(135deg,#1A1A1A,#2A2A2A)', tall:true },
-  { id:12, cat:'Clásico', emoji:'🎸', style:'Quiff Retro',         barber:'Ivan',    bg:'linear-gradient(135deg,#150A00,#251500)', tall:false },
+  {
+    id:1,
+    cat:'Fade',
+    image:skinfade,
+    style:'Skin Fade Perfecto',
+    barber:'Aleksei',
+    bg:'linear-gradient(135deg,#1A1A1A,#2C2C2C)',
+    tall:true
+  },
+
+  {
+    id:11,
+    cat:'Fade',
+    image:altofade,
+    style:'Skin Fade Alto',
+    barber:'Aleksei',
+    bg:'linear-gradient(135deg,#1A1A1A,#2C2C2C)',
+    tall:true
+  },
+
+
+    {
+    id:11,
+    cat:'Fade',
+    image:fadeuve,
+    style:'Skin Fade en V',
+    barber:'Aleksei',
+    bg:'linear-gradient(135deg,#1A1A1A,#2C2C2C)',
+    tall:true
+  },
+
+  {
+    id:2,
+    cat:'Clásico',
+    image:clasico,
+    style:'Corte Clásico Ejecutivo',
+    barber:'Ivan',
+    bg:'linear-gradient(135deg,#111,#222)',
+    tall:false
+  },
+
+  {
+    id:22,
+    cat:'Clásico',
+    image:clasicodos,
+    style:'Corte Clásico Business',
+    barber:'Ivan',
+    bg:'linear-gradient(135deg,#111,#222)',
+    tall:false
+  },
+
+    {
+    id:222,
+    cat:'Clásico',
+    image:clasicotres,
+    style:'Corte Clásico Juvenil',
+    barber:'Ivan',
+    bg:'linear-gradient(135deg,#111,#222)',
+    tall:false
+  },
+
+  {
+    id:3,
+    cat:'Barba',
+    image:barba,
+    style:'Beard Sculpt Premium',
+    barber:'Aleksei',
+    bg:'linear-gradient(135deg,#1A1209,#2C1E0A)',
+    tall:false
+  },
+
+  {
+    id:33,
+    cat:'Barba',
+    image:barbados,
+    style:'Beard Italian',
+    barber:'Aleksei',
+    bg:'linear-gradient(135deg,#1A1209,#2C1E0A)',
+    tall:false
+  },
+
+
+
+    {
+    id:333,
+    cat:'Barba',
+    image:barbatres,
+    style:'Beard Long',
+    barber:'Aleksei',
+    bg:'linear-gradient(135deg,#1A1209,#2C1E0A)',
+    tall:false
+  },
+
+
+  {
+    id:4,
+    cat:'Diseño',
+    image:diseño,
+    style:'Diseño Geométrico',
+    barber:'Dmitri',
+    bg:'linear-gradient(135deg,#0A0A1A,#111122)',
+    tall:false
+  }
 ]
 
 const filtered = computed(() => active.value==='all' ? gallery : gallery.filter(g=>g.cat===active.value))
 const selected = ref(null)
 
 const transformations = [
-  { id:1, before:'😐', after:'😎', style:'Transformación Skin Fade', barber:'Aleksei' },
-  { id:2, before:'🧑', after:'🧔', style:'Beard Growth Sculpt',      barber:'Aleksei' },
-  { id:3, before:'😶', after:'😏', style:'Look Ejecutivo',           barber:'Ivan' },
+  {
+    id: 1,
+    image: transformacion1,
+    style: 'Transformación Skin Fade',
+    barber: 'Aleksei'
+  },
+  {
+    id: 2,
+    image: transformacion2,
+    style: 'Shaved beard',
+    barber: 'Aleksei'
+  },
+  {
+    id: 3,
+    image: transformacion3,
+    style: 'Look Ejecutivo',
+    barber: 'Ivan'
+  }
 ]
 </script>
